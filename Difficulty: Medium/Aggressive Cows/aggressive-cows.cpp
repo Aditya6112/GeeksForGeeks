@@ -12,14 +12,14 @@ class Solution {
   public:
 
     bool isPossible(vector<int>& stalls,int dist,int cows,int placed_cow){
-        int prev_idx=0;
-        int curr_idx=1;
-        while(curr_idx<stalls.size()){
-            if(stalls[curr_idx]-stalls[prev_idx]>=dist){
+        int prev_cow=stalls[0];
+        int i=1;
+        while(i<stalls.size()){
+            if(stalls[i]-prev_cow>=dist){
                 placed_cow++;
-                prev_idx=curr_idx;
+                prev_cow=stalls[i];
             }
-            curr_idx++;
+            i++;
         }
         if(placed_cow>=cows){
             return true;
@@ -31,8 +31,10 @@ class Solution {
         // Write your code here
         sort(stalls.begin(),stalls.end());
         int n=stalls.size();
+        
         int start=1;
-        int end=abs(stalls[0]-stalls[n-1]);
+        int end=stalls[n-1]-stalls[0];
+        
         int ans=0;
         while(start<=end){
             int mid=start+(end-start)/2;
