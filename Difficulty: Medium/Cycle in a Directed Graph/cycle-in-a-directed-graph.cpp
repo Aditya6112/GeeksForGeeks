@@ -7,31 +7,27 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in a directed graph.
-    bool isCycleDFS(vector<vector<int>>& adj, int src, unordered_map<int, bool>& visited, unordered_map<int, int>& dfsVisited) {
+    bool dfs(vector<vector<int>>& adj,int src,vector<bool>& visited,vector<bool>& inRecursion){
         visited[src]=true;
-        dfsVisited[src]=true;
+        inRecursion[src]=true;
         for(auto nbr:adj[src]){
             if(!visited[nbr]){
-                if(isCycleDFS(adj,nbr,visited,dfsVisited)){
-                    return true;
-                }
-            }else if(dfsVisited[nbr]){
+                visited[nbr]=true;
+                if(dfs(adj,nbr,visited,inRecursion))return true;
+            }else if(inRecursion[nbr]){
                 return true;
             }
         }
-        dfsVisited[src]=false;
+        inRecursion[src]=false;
         return false;
     }
-
     bool isCyclic(int V, vector<vector<int>> adj) {
-        unordered_map<int, bool> visited;
-        unordered_map<int, int> dfsVisited;
-    
-        for (int i = 0; i < V; i++) {
-            if (!visited[i]) {
-                if (isCycleDFS(adj, i, visited,dfsVisited)) {
-                    return true;
-                }
+        // code here
+        vector<bool>visited(V,false);
+        vector<bool>inRecursion(V,false);
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                if(dfs(adj,i,visited,inRecursion))return true;
             }
         }
         return false;
