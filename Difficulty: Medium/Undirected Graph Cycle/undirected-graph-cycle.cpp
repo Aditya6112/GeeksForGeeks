@@ -7,38 +7,25 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool isCycleBFS(vector<vector<int>>& adj,int src,unordered_map<int,bool>& visited,unordered_map<int,int>& parent){
-        parent[src]=-1;
+    bool dfs(vector<vector<int>>& adj,int src,vector<bool>& visited,int parent){
         visited[src]=true;
-        queue<int>q;
-        q.push(src);
-        while(!q.empty()){
-            int front=q.front();
-            q.pop();
-            for(auto nbr:adj[front]){
-                if(visited[nbr]==true && nbr!=parent[front]){
-                    return true;
-                }
-                else if(!visited[nbr]){
-                    visited[nbr]=true;
-                    parent[nbr]=front;
-                    q.push(nbr);
-                }
+        for(auto nbr:adj[src]){
+            if(!visited[nbr]){
+                if(dfs(adj,nbr,visited,src))return true;
+            }else if(nbr!=parent){
+                return true;
             }
         }
         return false;
     }
-    
     bool isCycle(vector<vector<int>>& adj) {
-        // Code 
-        unordered_map<int,bool>visited;
-        unordered_map<int,int>parent;
-        int n=adj.size();
-        for(int i=0;i<n;i++){
+        // Code here
+        int v=adj.size();
+        vector<bool>visited(v,false);
+        int parent=-1;
+        for(int i=0;i<v;i++){
             if(!visited[i]){
-                if(isCycleBFS(adj,i,visited,parent)){
-                    return true;
-                }
+                if(dfs(adj,i,visited,parent))return true;
             }
         }
         return false;
