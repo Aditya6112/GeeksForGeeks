@@ -7,31 +7,32 @@ using namespace std;
 class Solution {
   public:
     // Function to return list containing vertices in Topological order.
-    void callDFS(vector<vector<int>>& adj,int node,unordered_map<int,bool>& visited,stack<int>& st){
-        visited[node]=true;
-        for(auto nbr:adj[node]){
+    void topo_sort(vector<vector<int>>& adj,int src,vector<bool>& visited,stack<int>& st){
+        visited[src]=true;
+        for(auto nbr:adj[src]){
             if(!visited[nbr]){
-                callDFS(adj,nbr,visited,st);
+                topo_sort(adj,nbr,visited,st);
             }
         }
-        st.push(node);
+        st.push(src);
     }
     vector<int> topologicalSort(vector<vector<int>>& adj) {
         // Your code here
-        unordered_map<int,bool>visited;
+        int v=adj.size();
+        vector<bool>visited(v,false);
         stack<int>st;
-        for(int i=0;i<adj.size();i++){
+        for(int i=0;i<v;i++){
             if(!visited[i]){
-                callDFS(adj,i,visited,st);
+                topo_sort(adj,i,visited,st);
             }
         }
-        vector<int>result;
+        vector<int>ans;
         while(!st.empty()){
             int top=st.top();
             st.pop();
-            result.push_back(top);
+            ans.push_back(top);
         }
-        return result;
+        return ans;
     }
 };
 
